@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Hiring Manager POC - Interview Explanation</title>
+<style>
+:root { --ink:#233044; --muted:#5f6d7e; --accent:#176b87; --soft:#e9f4f5; --line:#d7e1e5; --code:#17232d; }
+* { box-sizing:border-box; }
+body { margin:0; background:#edf1f2; color:var(--ink); font:16px/1.65 Georgia, 'Times New Roman', serif; }
+main { max-width:960px; margin:0 auto; padding:40px 28px 64px; background:#fff; min-height:100vh; }
+header { border-bottom:4px solid var(--accent); padding-bottom:22px; margin-bottom:28px; }
+h1 { margin:0 0 8px; color:var(--accent); font:700 2.4rem/1.15 Georgia, serif; }
+h2 { color:var(--accent); border-bottom:1px solid var(--line); padding-bottom:8px; margin-top:38px; }
+h3 { color:#24566a; margin-top:26px; }
+.subtitle { color:var(--muted); font-style:italic; margin:0; }
+.callout, .question { margin:18px 0; padding:16px 20px; border-left:4px solid var(--accent); background:var(--soft); }
+.question { border-left-color:#d48b31; background:#fff7e8; }
+pre { overflow:auto; padding:16px; background:var(--code); color:#e9f2f5; border-radius:5px; }
+code { color:#a52b52; background:#f2f5f6; padding:2px 5px; }
+pre code { color:inherit; background:none; padding:0; }
+table { width:100%; border-collapse:collapse; margin:16px 0 24px; }
+th, td { text-align:left; vertical-align:top; padding:10px; border:1px solid var(--line); }
+th { background:var(--accent); color:#fff; }
+li { margin:7px 0; }
+footer { color:var(--muted); border-top:1px solid var(--line); margin-top:44px; padding-top:16px; font-size:.9rem; }
+@media (max-width:650px) { main { padding:24px 17px 44px; } h1 { font-size:1.9rem; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>AI Hiring Manager POC</h1>
+<p class="subtitle">Interview preparation and resume talking points</p>
+</header>
+
+<h2>1. One-minute explanation</h2>
+<p>I built a retrieval-augmented hiring assistant that compares candidate resumes against a target job description while grounding the recommendation in hiring governance and AI usage policies. A recruiter enters a role such as AVP Collections Analytics. The system retrieves relevant job-description, policy, and resume passages, filters weak resume matches, and asks an LLM to produce ranked candidates, strengths, gaps, and a fit score.</p>
+<div class="callout"><strong>Business value:</strong> reduce manual resume screening time while keeping recommendations traceable to source documents and constrained by hiring policy.</div>
+
+<h2>2. Architecture</h2>
+<pre>Resumes (PDF)       Job descriptions (TXT)       Policies (TXT)
+       \                    |                         /
+        +------ loaders and metadata tagging -------+
+                              |
+             RecursiveCharacterTextSplitter
+                 chunk_size=500, overlap=50
+                              |
+     all-MiniLM-L6-v2 embeddings -> ChromaDB
+                              |
+ Role query -> filtered retrieval by source folder
+                              |
+   thresholded resume evidence + JD/policy context
+                              |
+       GPT-4o-mini, temperature 0 -> recommendation
+                              |
+                   Streamlit hiring UI</pre>
+
+<h2>3. How the implementation works</h2>
+<h3>Ingestion and indexing</h3>
+<ul>
+<li><code>PyPDFLoader</code> reads resumes and <code>TextLoader</code> reads policies and job descriptions.</li>
+<li>Metadata records the source folder and file name, which enables separate retrieval by document type.</li>
+<li>Documents are split into 500-character chunks with 50-character overlap.</li>
+<li><code>all-MiniLM-L6-v2</code> creates local embeddings and Chroma persists the searchable index.</li>
+</ul>
+<h3>Retrieval and decision support</h3>
+<ul>
+<li>Job descriptions and policies contribute two relevant chunks each.</li>
+<li>Up to eight resume matches are retrieved with similarity scores; scores below the configured threshold of <code>1.2</code> are retained because Chroma distance is lower-is-better in this implementation.</li>
+<li>The final prompt explicitly says to use only supplied context and to report when no strong candidate exists.</li>
+<li>The Streamlit app exposes the role input and renders the recommendation without exposing raw retrieval complexity to the recruiter.</li>
+</ul>
+
+<h2>4. Important design decisions</h2>
+<table><tr><th>Decision</th><th>Reason</th></tr>
+<tr><td>Separate retrieval filters</td><td>Prevents policy, job-description, and resume evidence from being mixed indiscriminately.</td></tr>
+<tr><td>Local embedding model</td><td>Reduces API cost and keeps the indexing path suitable for sensitive resume data.</td></tr>
+<tr><td>Similarity threshold</td><td>Provides a conservative "no suitable candidates" path instead of forcing a ranking.</td></tr>
+<tr><td>Grounded prompt</td><td>Requires evidence-based strengths, gaps, and a fit score rather than unsupported claims.</td></tr>
+</table>
+<div class="question"><strong>Interview answer:</strong> "I treated the model as a synthesis layer, not the source of truth. The source of truth is the retrieved resume, job, and policy context. That separation makes the system easier to audit and safer to evolve."</div>
+
+<h2>5. Risks and production improvements</h2>
+<ul>
+<li>Resume ranking can encode historical or representation bias; production use needs fairness testing, human approval, explanations, and no automatic rejection.</li>
+<li>The fixed threshold of <code>1.2</code> should be calibrated against labeled hiring examples rather than treated as a universal value.</li>
+<li>PII should be minimized in prompts and logs, with access controls, encryption, retention rules, and audit events.</li>
+<li>Production retrieval could add hybrid keyword plus vector search, reranking, document versioning, and evaluation sets.</li>
+<li>The current project requires an OpenAI key for generation; a production design should define a private model or approved gateway fallback.</li>
+</ul>
+
+<h2>6. Likely interview questions</h2>
+<h3>Why use RAG instead of asking an LLM to read every resume?</h3>
+<p>RAG limits the context to relevant passages, preserves source metadata, reduces token usage, and makes it possible to retrieve policies and job requirements separately from candidate evidence.</p>
+<h3>How do you prevent hallucinated hiring claims?</h3>
+<p>The prompt restricts the answer to retrieved context, the system can return no-match output, and the UI result should be treated as decision support requiring recruiter review. In production I would add citation spans and structured evidence for every recommendation.</p>
+<h3>Why is the score threshold important?</h3>
+<p>A ranking always produces an answer, even when all candidates are poor matches. Thresholding introduces abstention, which is safer for a hiring workflow. The threshold must be tuned using validation data.</p>
+<h3>What would you measure?</h3>
+<p>Recall of qualified candidates, precision of top-k recommendations, abstention quality, recruiter acceptance rate, explanation faithfulness, latency, cost, and fairness metrics across relevant groups.</p>
+
+<h2>7. Resume-ready bullets</h2>
+<ul>
+<li>Built a RAG-based AI Hiring Manager using LangChain, ChromaDB, local sentence-transformer embeddings, and GPT-4o-mini.</li>
+<li>Indexed resumes, job descriptions, and hiring policies with source metadata and filtered retrieval for evidence-grounded candidate analysis.</li>
+<li>Implemented similarity thresholding and no-match handling to reduce unsupported recommendations in a sensitive hiring workflow.</li>
+<li>Delivered a Streamlit interface that produces ranked candidates, strengths, gaps, and fit scores from retrieved evidence.</li>
+</ul>
+
+<footer>Project evidence: <code>src/injest.py</code>, <code>src/query.py</code>, <code>src/app.py</code>, resume and policy corpus, and persisted Chroma index.</footer>
+</main>
+</body>
+</html>

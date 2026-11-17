@@ -1,0 +1,17 @@
+Enterprise AI Usage and Governance Policy
+
+1. AI-generated recommendations are advisory in nature and should not replace human judgment.
+
+2. Personally identifiable information (PII) must not be exposed outside authorized enterprise systems.
+
+3. AI systems used in hiring must avoid discriminatory or biased decision-making.
+
+4. All AI-generated hiring recommendations must include explainability and supporting evidence.
+
+5. Sensitive candidate information should only be accessible to authorized personnel.
+
+6. AI models should be periodically reviewed for fairness, accuracy, and compliance.
+
+7. Human oversight is mandatory for all final hiring decisions.
+
+8. Enterprise AI systems must comply with applicable privacy and governance regulations.

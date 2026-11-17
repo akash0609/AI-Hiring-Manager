@@ -1,0 +1,38 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Local Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# Generated vector database
+chroma_db/
+
+# Candidate personal data
+docs/resumes/
+
+# Logs
+*.log
+
+# VS Code settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Model files
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.h5
+*.onnx

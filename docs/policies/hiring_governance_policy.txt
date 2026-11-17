@@ -1,0 +1,25 @@
+Enterprise Hiring Governance Policy
+
+1. All hiring decisions must comply with equal opportunity employment principles and applicable labor regulations.
+
+2. Candidate evaluations must be based on documented job requirements, competencies, and role expectations.
+
+3. All shortlisted candidates for Assistant Vice President roles must undergo background verification and employment validation.
+
+4. Candidates with employment gaps exceeding 12 months must provide additional clarification during the interview process.
+
+5. Frequent job changes across multiple organizations within short durations should be reviewed by hiring managers.
+
+6. Interview feedback must be documented and retained for audit and compliance purposes.
+
+7. Hiring decisions for leadership roles should consider stakeholder management, communication ability, and leadership potential in addition to technical expertise.
+
+8. Candidates handling customer or financial data must demonstrate awareness of data privacy, governance, and compliance practices.
+
+9. AI-assisted hiring recommendations should be reviewed by human decision-makers before final selection.
+
+10. Resume data and candidate information must be handled according to enterprise data privacy and confidentiality standards.
+
+11. Diversity and inclusion principles should be considered throughout the hiring process.
+
+12. Final hiring recommendations should include justification aligned to job requirements and governance policies.

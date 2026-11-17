@@ -1,0 +1,44 @@
+Assistant Vice President – Collections Analytics
+
+Location: Mumbai, India
+
+Role Summary:
+We are seeking an experienced analytics professional to lead collections strategy and analytics initiatives within the consumer banking portfolio. The role requires strong expertise in collections analytics, stakeholder management, data-driven decision making, and AI-enabled operational transformation.
+
+Key Responsibilities:
+
+1. Lead collections analytics initiatives across delinquency management, recovery optimization, and customer engagement strategies.
+
+2. Partner with Operations, Risk, Finance, and Technology teams to improve collections performance and operational efficiency.
+
+3. Build and manage dashboards, KPIs, and analytical frameworks for collections monitoring and forecasting.
+
+4. Drive strategic initiatives involving automation, GenAI, intelligent workflow systems, and operational analytics.
+
+5. Present insights and recommendations to senior leadership and business stakeholders.
+
+6. Mentor junior analysts and support team development initiatives.
+
+7. Collaborate with cross-functional teams on AI and data transformation programs.
+
+Required Skills:
+
+- 9+ years of experience in analytics, preferably within banking or financial services.
+- Strong SQL and data analysis expertise.
+- Experience with Tableau or Power BI.
+- Experience in collections, risk, or customer analytics.
+- Strong communication and stakeholder management skills.
+- Experience leading projects or managing teams.
+
+Preferred Skills:
+
+- Exposure to machine learning or AI initiatives.
+- Experience with process automation or intelligent operations.
+- Familiarity with cloud or modern data platforms.
+- Experience with Python is preferred but not mandatory.
+
+Education:
+Bachelor’s degree in Engineering, Statistics, Mathematics, Computer Science, or related discipline.
+
+Preferred:
+Postgraduate qualification in Analytics, Business, or Data Science.
